@@ -1,7 +1,11 @@
 package it.danieleborgna.earthquakes;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -19,6 +23,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,7 +31,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -43,11 +47,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     private MainViewModel mainViewModel;
 
-    private Marker myPositionMarker;
+    private LatLng myPosition;
 
     private List<Earthquake> earthquakes = new ArrayList<>();
 
     private FragmentMapBinding binding;
+
+    private Bitmap myPosMarkerIcon;
 
     private ActivityResultLauncher<String> permissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
@@ -73,13 +79,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        this.myPosMarkerIcon = loadIconBitmap();
+
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragmentMap);
         mapFragment.getMapAsync(this);
 
         int fineLocation = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-        if(fineLocation == PackageManager.PERMISSION_DENIED) {
+        if (fineLocation == PackageManager.PERMISSION_DENIED) {
             permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         }
     }
@@ -89,7 +97,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         super.onResume();
 
         int fineLocation = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-        if(fineLocation == PackageManager.PERMISSION_DENIED) {
+        if (fineLocation == PackageManager.PERMISSION_GRANTED) {
             LocationHelper.start(requireContext(), this);
         }
     }
@@ -101,9 +109,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         LocationHelper.stop(requireContext(), this);
     }
 
+    // I permessi sono già stati dati arrivati a questo punto
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
+
+        LocationHelper.start(requireContext(), this);
+        showMarkers();
+
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(@NonNull Marker marker) {
@@ -118,7 +132,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 }
             }
         });
-        showMarkers();
+
+        binding.updatePositionButton.setOnClickListener(view -> {
+            LocationHelper.updatePosition(requireContext(), this);
+        });
     }
 
     private void showMarkers() {
@@ -128,56 +145,51 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                     MapFragment.this.earthquakes = earthquakes;
 
                     map.clear();
-                    earthquakes.forEach(this::createEarthquake);
+                    earthquakes.forEach(this::createEarthquakeMarker);
                 });
     }
 
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
-        LatLngBounds.Builder bounds = new LatLngBounds.Builder();
-        bounds.include(currentPosition); // se non c'è nessuna posizione va in crash quando creo il bound
-        if (myPositionMarker == null) {
-            MarkerOptions options = new MarkerOptions();
-            options.title(getString(R.string.my_location));
-            options.position(currentPosition);
-            myPositionMarker = map.addMarker(options);
-        } else {
-            myPositionMarker.setPosition(currentPosition);
-        }
-        new Thread(() -> {
-
-            // quando la posizione viene cambiata, posso mostrare solo le stazioni nella mia zona
-            if (!earthquakes.isEmpty()) {
-                // rettangolo nella mappa
-
-                for (Earthquake earthquake : earthquakes) {
-                    Location earthquakeLocation = new Location(getString(R.string.earthquake));
-                    earthquakeLocation.setLatitude(earthquake.getLatitude());
-                    earthquakeLocation.setLongitude(earthquake.getLongitude());
-
-                    if (earthquakeLocation.distanceTo(location) >= 10000) continue; //10 km
-
-                    bounds.include(new LatLng(earthquake.getLatitude(), earthquake.getLongitude()));
-                }
-            }
-
-            // questo serve per eseguire l'operazione sul main thread dopo che tutto il resto è stato eseguito
-            binding.getRoot().post(() -> {
-                map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 16));
-            });
-        }).start();
-
-
-    }
-
-    private void createEarthquake(Earthquake earthquake) {
+    private void createEarthquakeMarker(Earthquake earthquake) {
         MarkerOptions options = new MarkerOptions();
         options.title(earthquake.getMagnitudeToString());
+        options.contentDescription(earthquake.getDateToString());
         options.position(new LatLng(earthquake.getLatitude(), earthquake.getLongitude()));
-        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        options.icon(BitmapDescriptorFactory.defaultMarker(10.0f));
         Marker marker = map.addMarker(options);
         marker.setTag(earthquake);
     }
 
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        this.myPosition = new LatLng(location.getLatitude(), location.getLongitude());
+
+        MarkerOptions options = new MarkerOptions();
+        options.title(getString(R.string.my_position));
+        options.position(this.myPosition);
+        options.zIndex(Integer.MAX_VALUE);
+        options.icon(BitmapDescriptorFactory.fromBitmap(this.myPosMarkerIcon));
+        map.addMarker(options);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myPosition, 12));
+    }
+
+    private Bitmap loadIconBitmap() {
+        // Ottieni il riferimento al tuo vector asset
+        Drawable vectorDrawable = VectorDrawableCompat.create(getResources(), R.drawable.my_pos_circle, null);
+
+        // Imposta le dimensioni desiderate per la bitmap
+        int width = vectorDrawable.getIntrinsicWidth();
+        int height = vectorDrawable.getIntrinsicHeight();
+
+        // Crea una bitmap vuota con le dimensioni specificate
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        // Crea un canvas associato alla bitmap
+        Canvas canvas = new Canvas(bitmap);
+
+        // Disegna il vector asset sulla bitmap
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        vectorDrawable.draw(canvas);
+
+        return bitmap;
+    }
 }
