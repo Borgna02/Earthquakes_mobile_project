@@ -122,7 +122,7 @@ public class Earthquake implements Serializable {
     }
 
     public String getDateToString() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.ITALIAN);
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy kk:mm:ss", Locale.ITALIAN);
         return dateFormat.format(this.date);
     }
 

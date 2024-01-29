@@ -50,4 +50,7 @@ dependencies {
     //Room Db
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    //Maps
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 }
