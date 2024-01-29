@@ -5,10 +5,12 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import it.danieleborgna.earthquakes.model.Earthquake;
 
 @Database(entities = {Earthquake.class}, version = 1)
+@TypeConverters(Converters.class)
 public abstract class DB extends RoomDatabase {
 
     public abstract EarthquakeDAO getEarthquakeDAO();
