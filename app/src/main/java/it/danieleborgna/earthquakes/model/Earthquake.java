@@ -150,6 +150,10 @@ public class Earthquake implements Serializable {
         return depth;
     }
 
+    public String getDepthToString() {
+        return Double.toString(depth) + " km";
+    }
+
     public void setDepth(double depth) {
         this.depth = depth;
     }
