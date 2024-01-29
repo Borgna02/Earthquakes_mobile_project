@@ -46,4 +46,8 @@ dependencies {
 
     // cronet
     implementation("com.google.android.gms:play-services-cronet:18.0.1")
+
+    //Room Db
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
 }

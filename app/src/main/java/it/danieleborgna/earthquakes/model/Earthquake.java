@@ -1,8 +1,16 @@
 package it.danieleborgna.earthquakes.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /*
 {"id":21851,
@@ -15,6 +23,7 @@ import java.io.Serializable;
 "region":"6 km NW Ricigliano (SA)",
 "event_url":"https:\/\/terremoti.ingv.it\/event\/37441251\/?tab=MeccanismoFocale#TDMTinfo"}
 */
+@Entity(tableName = "earthquakes")
 public class Earthquake implements Serializable {
 
     public static Earthquake parseJson(JSONObject object) {
@@ -32,7 +41,14 @@ public class Earthquake implements Serializable {
         }
 
         // date
-        earthquake.setDate(object.optString("ot"));
+        try {
+            // Se non c'è la data, restituisco un valore impossibile ma che possa essere parsato
+            String dateStr = object.optString("ot", "1000-01-01 00:00:00");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.ITALIAN);
+            earthquake.setDate(dateFormat.parse(dateStr));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         // latitude
         try {
@@ -82,8 +98,9 @@ public class Earthquake implements Serializable {
 
     }
 
+    @PrimaryKey
     private Integer id;
-    private String date;
+    private Date date;
     private double latitude;
     private double longitude;
     private double depth;
@@ -100,11 +117,11 @@ public class Earthquake implements Serializable {
         this.id = id;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
