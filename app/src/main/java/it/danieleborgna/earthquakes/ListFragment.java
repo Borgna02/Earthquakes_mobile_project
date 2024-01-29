@@ -40,8 +40,8 @@ public class ListFragment extends Fragment {
 
         mainViewModel.getEarthquakes().observe(getViewLifecycleOwner(), new Observer<List<Earthquake>>() {
             @Override
-            public void onChanged(List<Earthquake> stations) {
-                binding.recyclerView.setAdapter(new EarthquakeAdapter(stations));
+            public void onChanged(List<Earthquake> earthquakes) {
+                binding.recyclerView.setAdapter(new EarthquakeAdapter(earthquakes));
             }
         });
 
