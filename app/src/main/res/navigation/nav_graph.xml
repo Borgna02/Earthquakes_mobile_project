@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="it.danieleborgna.earthquakes.listFragment"
+        android:name="it.danieleborgna.earthquakes.ListFragment"
         tools:layout="@layout/fragment_list"
         android:label="listFragment" >
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
-        android:name="it.danieleborgna.earthquakes.mapFragment"
+        android:name="it.danieleborgna.earthquakes.MapFragment"
         tools:layout="@layout/fragment_map"
         android:label="mapFragment" >
         <action
@@ -27,6 +27,6 @@
     <activity
         android:id="@+id/detailActivity"
         tools:layout="@layout/activity_detail"
-        android:name="it.danieleborgna.earthquakes.detailActivity"
+        android:name="it.danieleborgna.earthquakes.DetailActivity"
         android:label="detailActivity" />
 </navigation>

@@ -1,5 +1,7 @@
 package it.danieleborgna.earthquakes.model;
 
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /*
@@ -14,6 +16,72 @@ import java.io.Serializable;
 "event_url":"https:\/\/terremoti.ingv.it\/event\/37441251\/?tab=MeccanismoFocale#TDMTinfo"}
 */
 public class Earthquake implements Serializable {
+
+    public static Earthquake parseJson(JSONObject object) {
+
+        if (object == null) return null;
+
+        Earthquake earthquake = new Earthquake();
+
+        // id
+        try {
+            String idStr = object.optString("id", null);
+            earthquake.setId(Integer.parseInt(idStr)); // Può anche essere null perché è Integer
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        // date
+        earthquake.setDate(object.optString("ot"));
+
+        // latitude
+        try {
+            String latStr = object.optString("lat", null);
+            if (latStr != null) earthquake.setLatitude(Double.parseDouble(latStr));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        // longitude
+        try {
+            String lngStr = object.optString("lon", null);
+            if (lngStr != null) earthquake.setLongitude(Double.parseDouble(lngStr));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        // depth
+        try {
+            String depthStr = object.optString("depth", null);
+            if (depthStr != null) earthquake.setDepth(Double.parseDouble(depthStr));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        // magnitude
+        try {
+            String magnitudeStr = object.optString("mag", null);
+            if (magnitudeStr != null) earthquake.setMagnitude(Double.parseDouble(magnitudeStr));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        // magnitude type
+        earthquake.setMagnitudeType(object.optString("mag_type"));
+
+        // region
+        earthquake.setRegion(object.optString("region"));
+
+        // event_url
+        earthquake.setEventUrl(object.optString("event_url"));
+
+
+
+        return earthquake;
+
+
+    }
+
     private Integer id;
     private String date;
     private double latitude;
