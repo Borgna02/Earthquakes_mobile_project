@@ -121,6 +121,11 @@ public class Earthquake implements Serializable {
         return date;
     }
 
+    public String getDateToString() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.ITALIAN);
+        return dateFormat.format(this.date);
+    }
+
     public void setDate(Date date) {
         this.date = date;
     }
@@ -151,6 +156,10 @@ public class Earthquake implements Serializable {
 
     public double getMagnitude() {
         return magnitude;
+    }
+
+    public String getMagnitudeToString() {
+        return Double.toString(this.magnitude).substring(0, 3);
     }
 
     public void setMagnitude(double magnitude) {

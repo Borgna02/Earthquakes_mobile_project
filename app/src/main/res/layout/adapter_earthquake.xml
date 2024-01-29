@@ -7,7 +7,9 @@
             name="earthquake"
             type="it.danieleborgna.earthquakes.model.Earthquake" />
     </data>
+
     <FrameLayout
+        android:id="@+id/frameLayoutAdapter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -27,9 +29,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
+                    android:text="@{earthquake.getMagnitudeToString() + ' ' + earthquake.magnitudeType}"
                     android:textSize="28sp"
                     android:textStyle="bold"
-                    android:text="@{earthquake.magnitude + ' ' + earthquake.magnitudeType}"
                     tools:text="Magnitude" />
 
                 <LinearLayout
@@ -43,8 +45,8 @@
                         android:id="@+id/textCity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
                         android:text="@{earthquake.region}"
+                        android:textSize="16sp"
                         tools:text="City" />
 
                     <View
@@ -58,7 +60,7 @@
                         android:id="@+id/textDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{earthquake.date}"
+                        android:text="@{earthquake.getDateToString()}"
                         android:textSize="16sp"
                         tools:text="Date" />
 
