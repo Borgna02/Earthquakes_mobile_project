@@ -5,7 +5,6 @@
     <string name="location_required">Location required</string>
     <string name="my_location">My location</string>
     <string name="earthquake">earthquake</string>
-    <string name="my_position">My position</string>
     <string name="earthquake_details">Earthquake details</string>
     <string name="magnitude">Magnitude</string>
     <string name="date">Date</string>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="list">Lista</string>
+    <string name="map">Mappa</string>
+    <string name="location_required">Posizione richiesta</string>
+    <string name="my_location">La mia posizione</string>
+    <string name="earthquake">terremoto</string>
+    <string name="earthquake_details">Dettagli sul terremoto</string>
+    <string name="magnitude">Magnitudo</string>
+    <string name="date">Data</string>
+    <string name="value">Valore</string>
+    <string name="field">Campo</string>
+    <string name="longitude">Longitudine</string>
+    <string name="region">Zona</string>
+    <string name="depth">Profondità</string>
+    <string name="latitude">Latitudine</string>
+    <string name="more_details">Più dettagli</string>
+    <string name="app_name">Terremoti</string>
+</resources>

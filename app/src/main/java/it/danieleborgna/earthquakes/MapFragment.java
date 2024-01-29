@@ -164,7 +164,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         this.myPosition = new LatLng(location.getLatitude(), location.getLongitude());
 
         MarkerOptions options = new MarkerOptions();
-        options.title(getString(R.string.my_position));
+        options.title(getString(R.string.my_location));
         options.position(this.myPosition);
         options.zIndex(Integer.MAX_VALUE);
         options.icon(BitmapDescriptorFactory.fromBitmap(this.myPosMarkerIcon));
