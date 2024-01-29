@@ -2,9 +2,13 @@ package it.danieleborgna.earthquakes.database;
 
 import android.content.Context;
 
+import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import it.danieleborgna.earthquakes.model.Earthquake;
+
+@Database(entities = {Earthquake.class}, version = 1)
 public abstract class DB extends RoomDatabase {
 
     public abstract EarthquakeDAO getEarthquakeDAO();

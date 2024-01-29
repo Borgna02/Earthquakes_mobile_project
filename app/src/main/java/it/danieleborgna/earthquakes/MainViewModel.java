@@ -24,7 +24,7 @@ import it.danieleborgna.earthquakes.service.Request;
 
 public class MainViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<Earthquake>> earthquakes = new MutableLiveData<>();
+    private final MutableLiveData<List<Earthquake>> earthquakes = new MutableLiveData<>();
     private Repository repository;
 
 
