@@ -42,7 +42,6 @@ public class MainViewModel extends AndroidViewModel {
                     public void onCompleted(UrlRequest request, UrlResponseInfo info, byte[] data, CronetException error) {
                         List<Earthquake> tempEarthquakes = new ArrayList<>();
                         if(data != null) {
-                            System.out.println(data);
                             String response = new String(data);
                             try {
                                 JSONArray array = new JSONArray(response);

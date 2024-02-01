@@ -18,6 +18,8 @@ public class Request {
 
     private static volatile Request instance = null;
 
+    private final String DATASET_URL = "https://terremoti.ingv.it/en/tdmt_export?starttime=1985-01-01T00%3A00%3A00&endtime=2024-01-29T23%3A59%3A59&last_nd=-2&minmag=-1&maxmag=10&mindepth=-10&maxdepth=1000&minlat=-90&maxlat=90&minlon=-180&maxlon=180&minversion=100&limit=30&orderby=ot-desc&tdmt_flag%5B%5D=tdmt_auto&tdmt_flag%5B%5D=tdmt_reviewer&tdmt_flag%5B%5D=tdmt_historical&lat=0&lon=0&maxradiuskm=-1&wheretype=area&0=wheretype&1=last_nd&2=limit&3=page&4=box_search&5=maxradiuskm&6=lat&7=lon&format=json";
+
     public static synchronized Request getInstance(Context context) {
         if (instance == null) {
             synchronized (Request.class) {
@@ -43,8 +45,7 @@ public class Request {
     private final Executor executor = Executors.newSingleThreadExecutor();
 
     public void requestDownload(Request.RequestCallback callback) {
-        engine.newUrlRequestBuilder("https://terremoti.ingv.it/en/tdmt_export?starttime=1985-01-01T00%3A00%3A00&endtime=2024-01-29T23%3A59%3A59&last_nd=-2&minmag=-1&maxmag=10&mindepth=-10&maxdepth=1000&minlat=-90&maxlat=90&minlon=-180&maxlon=180&minversion=100&limit=30&orderby=ot-desc&tdmt_flag%5B%5D=tdmt_auto&tdmt_flag%5B%5D=tdmt_reviewer&tdmt_flag%5B%5D=tdmt_historical&lat=0&lon=0&maxradiuskm=-1&wheretype=area&0=wheretype&1=last_nd&2=limit&3=page&4=box_search&5=maxradiuskm&6=lat&7=lon&format=json"
-                        , callback, executor)
+        engine.newUrlRequestBuilder(DATASET_URL, callback, executor)
                 .build()
                 .start();
     }
@@ -56,15 +57,15 @@ public class Request {
         private final WritableByteChannel channel = Channels.newChannel(received);
 
         @Override
-        public void onRedirectReceived(UrlRequest request, UrlResponseInfo info, String newLocationUrl) throws Exception {
+        public void onRedirectReceived(UrlRequest request, UrlResponseInfo info, String newLocationUrl) {
             // Come ci comportiamo quando riceviamo un redirect dal server
             request.followRedirect(); // per seguire il redirect
         }
 
         @Override
-        public void onResponseStarted(UrlRequest request, UrlResponseInfo info) throws Exception {
+        public void onResponseStarted(UrlRequest request, UrlResponseInfo info) {
             // Inizializziamo la memoria da allocare se la risposta è OK
-            if(info.getHttpStatusCode() == 200 /* OK */) {
+            if (info.getHttpStatusCode() == 200 /* OK */) {
                 //1MB
                 int BUFFERSIZE = 1024 * 1024;
                 request.read(ByteBuffer.allocateDirect(BUFFERSIZE));
@@ -72,7 +73,7 @@ public class Request {
         }
 
         @Override
-        public void onReadCompleted(UrlRequest request, UrlResponseInfo info, ByteBuffer byteBuffer) throws Exception {
+        public void onReadCompleted(UrlRequest request, UrlResponseInfo info, ByteBuffer byteBuffer) {
             // Aggiungiamo i dati nel buffer
             byteBuffer.flip();
 

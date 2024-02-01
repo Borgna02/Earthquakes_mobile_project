@@ -2,10 +2,10 @@
 <resources>
     <string name="list">Lista</string>
     <string name="map">Mappa</string>
-    <string name="location_required">Posizione richiesta</string>
+    <string name="location_required">Impossibile localizzarti senza il permesso</string>
     <string name="my_location">La mia posizione</string>
     <string name="earthquake">terremoto</string>
-    <string name="earthquake_details">Dettagli sul terremoto</string>
+    <string name="earthquake_details">Dettagli terremoto</string>
     <string name="magnitude">Magnitudo</string>
     <string name="date">Data</string>
     <string name="value">Valore</string>

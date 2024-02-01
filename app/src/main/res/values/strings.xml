@@ -2,7 +2,7 @@
     <string name="app_name">Earthquakes</string>
     <string name="list">List</string>
     <string name="map">Map</string>
-    <string name="location_required">Location required</string>
+    <string name="location_required">Unable to locate you without permission</string>
     <string name="my_location">My location</string>
     <string name="earthquake">earthquake</string>
     <string name="earthquake_details">Earthquake details</string>
