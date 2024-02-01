@@ -16,4 +16,10 @@
     <string name="latitude">Latitudine</string>
     <string name="more_details">Più dettagli</string>
     <string name="app_name">Terremoti</string>
+    <string name="sort_by_magnitude">Ordina per magnitudo</string>
+    <string name="sort_by_date">Ordina per data</string>
+    <string name="sort_by_date_ascending">Ordina per data crescente</string>
+    <string name="sort_by_date_descending">Ordina per data descrescente</string>
+    <string name="sort_by_magnitude_descending">Ordina per magnitudo descrescente</string>
+    <string name="sort_by_magnitude_ascending">Ordina per magnitudo crescente</string>
 </resources>

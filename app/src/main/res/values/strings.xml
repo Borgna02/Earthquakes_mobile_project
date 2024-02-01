@@ -15,4 +15,10 @@
     <string name="depth">Depth</string>
     <string name="latitude">Latitude</string>
     <string name="more_details">More details</string>
+    <string name="sort_by_magnitude">Sort by magnitude</string>
+    <string name="sort_by_date">Sort by date</string>
+    <string name="sort_by_date_ascending">Sort by date ascending</string>
+    <string name="sort_by_date_descending">Sort by date descending</string>
+    <string name="sort_by_magnitude_descending">Sort by magnitude descending</string>
+    <string name="sort_by_magnitude_ascending">Sort by magnitude ascending</string>
 </resources>
