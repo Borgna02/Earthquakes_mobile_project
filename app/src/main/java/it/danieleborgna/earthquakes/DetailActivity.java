@@ -3,7 +3,6 @@ package it.danieleborgna.earthquakes;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,14 +43,10 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
-        binding.moreDetailsButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                System.out.println(earthquake.getEventUrl());
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getEventUrl()));
-                startActivity(intent);
-            }
+        binding.moreDetailsButton.setOnClickListener(v -> {
+            System.out.println(earthquake.getEventUrl());
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getEventUrl()));
+            startActivity(intent);
         });
 
 
