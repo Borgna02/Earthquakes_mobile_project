@@ -16,7 +16,7 @@ import it.danieleborgna.earthquakes.model.Earthquake;
 
 public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.ViewHolder> {
 
-    private List<Earthquake> data;
+    private final List<Earthquake> data;
 
     public EarthquakeAdapter(List<Earthquake> data) {
         this.data = data;
@@ -43,7 +43,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private AdapterEarthquakeBinding binding;
+        private final AdapterEarthquakeBinding binding;
 
         public ViewHolder(AdapterEarthquakeBinding binding) {
             super(binding.getRoot());

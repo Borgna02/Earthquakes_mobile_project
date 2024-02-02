@@ -49,7 +49,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     private final ActivityResultLauncher<String> permissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(), granted -> {
-                System.out.println("Inside permission request, granted: " + granted);
                 if (granted) {
                     LocationHelper.updateLocation(requireContext(), MapFragment.this);
                 } else {
@@ -77,12 +76,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
-        if (!checkPermission()) permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        if (!checkLocationPermission()) permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
-    public boolean checkPermission() {
+    public boolean checkLocationPermission() {
         int fineLocation = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-        System.out.println("Asking permission, current value" + fineLocation);
         return fineLocation == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -125,7 +123,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         });
 
         binding.updatePositionButton.setOnClickListener(view -> {
-            if (!checkPermission())
+            if (!checkLocationPermission())
                 permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
 
             LocationHelper.updateLocation(requireContext(), this);

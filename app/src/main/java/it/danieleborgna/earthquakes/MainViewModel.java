@@ -63,7 +63,7 @@ public class MainViewModel extends AndroidViewModel {
 
                         DB.getInstance(application).getEarthquakeDAO().insert(tempEarthquakes);
 
-                        earthquakes.postValue(tempEarthquakes); // uso postValue perché sono in un thread separato
+                        earthquakes.postValue(tempEarthquakes);
                     }
                 });
             } else {
